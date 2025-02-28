@@ -1,0 +1,10 @@
+footer {
+  width: 100%;
+  background-color: var(--bg-primary);
+  position: relative;
+  width: 100%;
+  padding: 6px 10px;
+  z-index: 1;
+  color: var(--light-text);
+  font-size: 16px;
+}

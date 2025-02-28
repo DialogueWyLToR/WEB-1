@@ -1,0 +1,135 @@
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-smooth: always;
+  outline: 0 none;
+}
+* h1,
+* h2,
+* h3,
+* h4,
+* h5,
+* h6 {
+  font-size: inherit;
+  font-weight: normal;
+}
+* ul,
+* ol {
+  list-style: none;
+}
+* a {
+  text-decoration: none;
+  color: inherit;
+}
+*:after,
+*:before {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-smooth: always;
+  outline: 0 none;
+}
+*:after h1,
+*:after h2,
+*:after h3,
+*:after h4,
+*:after h5,
+*:after h6,
+*:before h1,
+*:before h2,
+*:before h3,
+*:before h4,
+*:before h5,
+*:before h6 {
+  font-size: inherit;
+  font-weight: normal;
+}
+*:after ul,
+*:after ol,
+*:before ul,
+*:before ol {
+  list-style: none;
+}
+*:after a,
+*:before a {
+  text-decoration: none;
+  color: inherit;
+}
+
+:root {
+  /* Breakpoints */
+  --sm: 640px;
+  --md: 768px;
+  --lg: 1024px;
+  --xl: 1280px;
+  --2xl: 1536px;
+
+  /* Háttérszínek */
+  --bg-primary: var(--primary);
+  --bg-light: var(--light-bg);
+  --bg-header-footer: var(--header-main-footer-bg);
+
+  /* Szövegszínek */
+  --text-primary: var(--dark-text);
+  --text-secondary: var(--dark-text-alt);
+  --text-light: var(--light-text);
+  --text-dark: var(--dark-dark-text);
+
+  /* Gombszínek */
+  --button-primary: var(--primary);
+  --button-primary-text: var(--button-primary-text);
+  --button-hover: var(--button-hover);
+  --button-hover-text: var(--button-hover-text);
+
+  /* Határvonal színek */
+  --border-light: var(--light-border);
+
+  /* Színek */
+  --primary: #031c0c;
+  --button-primary: #5c4805;
+  --button-primary-text: #ffffff;
+  --button-hover: #b68e2c;
+  --button-hover-text: #ffffff;
+  --dark-text: #161816;
+  --dark-text-alt: #262726;
+  --light-text: #f5fd81;
+  --light-border: #ececec;
+  --light-bg: #d5d6c2;
+  --dark-dark-text: #ffffff;
+  --header-main-footer-bg: #ffffff;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  align-items: stretch;
+}
+
+.button {
+  background-color: var(--bg-primary);
+  color: var(--text-light);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+.active{
+  text-decoration: underline;
+}
+.button:hover {
+  background-color: var(--button-hover);
+}
+@media (max-width: 640px) {
+  aside {
+    display: none;
+  }
+}
