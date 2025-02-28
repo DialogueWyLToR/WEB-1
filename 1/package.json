@@ -4,15 +4,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "live-server index.html"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "chart.js": "^4.4.8",
-    "live-server": "^1.2.0"
+    "chart.js": "^4.4.8"
   }
 }
