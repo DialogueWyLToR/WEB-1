@@ -1,0 +1,9 @@
+.html-5-main {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.html-5-main section{
+    padding: 5px;
+    border-bottom: 5px solid var(--primary);
+}

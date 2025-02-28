@@ -7,12 +7,15 @@
     <script type="module" src="../js/main.js" defer></script>
     <script type="module" src="../js/constans.js" defer></script>
     <script type="module" src="../js/ajax.js" defer></script>
+    <script type="module" src="../js/html.js"></script>
     <link rel="stylesheet" href="../css/skeleton.css" />
   </head>
   <body>
     <header>
       <nav>
-        <h1><a href="../index.html">Web-programozás-1 Előadás Házi feladat</a></h1>
+        <h1>
+          <a href="../index.html">Web-programozás-1 Előadás Házi feladat</a>
+        </h1>
         <ul>
           <li class="button" id="li-menu-table">
             <a href="./table.html">Táblázat</a>
@@ -30,15 +33,82 @@
             <a href="./oojs.html">OOJS</a>
           </li>
         </ul>
+        <ul>
+          <li class="button"><a href="#webStorage">Web Storage</a></li>
+          <li class="button"><a href="#webWorkers">Web Workers</a></li>
+          <li class="button"><a href="#sse">Server-Sent Events</a></li>
+          <li class="button"><a href="#geolocation">Geolocation API</a></li>
+          <li class="button"><a href="#dragDrop">Drag and Drop</a></li>
+          <li class="button"><a href="#canvas">Canvas</a></li>
+          <li class="button"><a href="#svg">SVG</a></li>
+        </ul>
       </nav>
     </header>
     <div class="container">
-      <main>
-      
+      <main class="html-5-main">
+        <section id="webStorage">
+          <h2>Web Storage</h2>
+          <button class="button" id="store">Tárolás</button>
+          <button class="button" id="load">Betöltés</button>
+          <button class="button" id="erase">Törlés</button>
+        </section>
+
+        <section id="webWorkers">
+          <h2>Web Workers</h2>
+          <button class="button">Worker indítása</button>
+          <p id="workerResult"></p>
+        </section>
+
+        <section id="sse">
+          <h2>Élő frissítések (Server-Sent Events)</h2>
+          <ul id="event-list"></ul>
+        </section>
+
+        <section id="geolocation">
+          <h2>Geolocation API</h2>
+          <button class="button">Helyzet lekérése</button>
+          <p id="location"></p>
+        </section>
+
+        <section id="dragDrop">
+          <h2>Drag and Drop</h2>
+          <div
+            id="dragBox"
+            draggable="true"
+            style="width: 100px; height: 100px; background: red"
+          ></div>
+          <div
+            id="dropZone"
+            style="
+              width: 200px;
+              height: 200px;
+              border: 2px dashed black;
+              margin-top: 10px;
+            "
+          ></div>
+        </section>
+
+        <section id="canvas">
+          <h2>Canvas</h2>
+          <canvas id="myCanvas" width="200" height="200"></canvas>
+          <button class="button">Rajzolás</button>
+        </section>
+
+        <section id="svg">
+          <h2>SVG</h2>
+          <svg>
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="black"
+              stroke-width="3"
+              fill="red"
+            />
+          </svg>
+        </section>
       </main>
-      <aside>
-       
-      </aside>
+      <aside></aside>
     </div>
     <footer>
       <p>Készítette: Békési Patrik | Neptun kód: NLYG87</p>
