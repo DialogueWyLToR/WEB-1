@@ -5,9 +5,6 @@ const geolocationHTML = document.querySelector("#geolocation");
 const dragDropHTML = document.querySelector("#dragDrop");
 const canvasHTML = document.querySelector("#canvas");
 const svgHTML = document.querySelector("#svg");
-const evtSource = new EventSource("../template/test.php", {
-  withCredentials: true,
-});
 const eventList = document.getElementById("event-list");
 webStorageHTML.querySelector("#store").addEventListener("click", () => {
   const data = prompt("Mit szeretnél eltárolni?", "szia localStorage");
