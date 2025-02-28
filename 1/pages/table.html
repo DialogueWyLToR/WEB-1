@@ -35,10 +35,44 @@
     </header>
     <div class="container">
       <main>
-        
+        <table class="dataTable">
+          <thead>
+            <tr>
+              <th id="th-name">
+                <div>
+                  <span>Név</span>
+                  <span id="name"></span>
+                </div>
+              </th>
+              <th id="th-age">
+                <div>
+                  <span>Kor</span>
+                  <span id="age"></span>
+                </div>
+              </th>
+              <th id="th-city">
+                <div>
+                  <span>Város</span>
+                  <span id="city"></span>
+                </div>
+              </th>
+              <th>Művelet</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </main>
       <aside>
-        
+        <form class="table-form">
+          <label for="form-name">Név</label>
+          <input type="text" id="form-name" />
+          <label for="form-age">Kor</label>
+          <input type="number" id="form-age" />
+          <label for="form-city">Város</label>
+          <input type="text" id="form-city" />
+          <button class="button" id="createBtn">Létrehozás</button>
+        </form>
+      </aside>
     </div>
     <footer>
       <p>Készítette: Békési Patrik | Neptun kód: NLYG87</p>
