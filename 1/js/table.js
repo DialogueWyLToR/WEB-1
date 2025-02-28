@@ -3,6 +3,7 @@ const formHTML = document.querySelector(".table-form");
 const createBtn = document.querySelector("#createBtn");
 const stats = document.querySelector("#stats");
 const data = JSON.parse(localStorage.getItem("data") || "[]");
+const searchBtn = document.querySelector("#search-button");
 const arrang = {
   byName: document.querySelector("#th-name"),
   byAge: document.querySelector("#th-age"),
@@ -14,11 +15,16 @@ const getUrlParams = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const sortBy = urlParams.get("sortBy") || "name";
   const order = urlParams.get("order") || "asc";
-  return { sortBy, order };
+  const search = urlParams.get("search") || "";
+  const searchIn = urlParams.get("searchIn") || "all";
+  return { sortBy, order, search, searchIn };
 };
-const renderTable = () => {
+const renderTable = (render = data) => {
   tableBody.innerHTML = "";
-  data.forEach((row, index) => {
+  if (render.length == 0) {
+    tableBody.innerHTML = "Nincs a keresési feltételeknek megfelelő találat";
+  }
+  render.forEach((row, index) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
         <td>${row.name}</td>
@@ -32,11 +38,24 @@ const renderTable = () => {
     tableBody.appendChild(tr);
   });
 };
-const { sortBy, order } = getUrlParams();
-const sortData = (key, order) => {
-  data.sort((a, b) => {
+const { sortBy, order, search, searchIn } = getUrlParams();
+const searchData = (searchQuery, searchField) => {
+  const filtered = data.filter((item) => {
+    if (searchField === "all") {
+      return Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(searchQuery)
+      );
+    } else {
+      return String(item[searchField]).toLowerCase().includes(searchQuery);
+    }
+  });
+  return filtered;
+};
+const sortData = (key, order, searchQuery = "", searchField = "all") => {
+  const filteredData = searchData(searchQuery, searchField).sort((a, b) => {
     let valueA = a[key];
     let valueB = b[key];
+
     if (typeof valueA === "number" && typeof valueB === "number") {
       return order === "asc" ? valueA - valueB : valueB - valueA;
     }
@@ -46,8 +65,11 @@ const sortData = (key, order) => {
         ? valueA.localeCompare(valueB)
         : valueB.localeCompare(valueA);
     }
+
+    return 0;
   });
-  renderTable();
+
+  renderTable(filteredData);
 };
 
 Object.values(arrang).forEach((element) => {
@@ -134,7 +156,16 @@ window.deleteRow = (idx) => {
     renderTable();
   }
 };
-
+searchBtn.addEventListener("click", () => {
+  const searchInput = document.getElementById("searchInput").value.trim();
+  const searchField = document.getElementById("searchInSelect").value.trim();
+  const newUrl = new URL(window.location.href);
+  newUrl.searchParams.set("search", searchInput);
+  newUrl.searchParams.set("searchIn", searchField);
+  history.pushState({}, "", newUrl);
+  const { sortBy, order, search, searchIn } = getUrlParams();
+  sortData(sortBy, order, search, searchIn);
+});
 const saveToLocal = () => {
   localStorage.setItem("data", JSON.stringify(data));
 };

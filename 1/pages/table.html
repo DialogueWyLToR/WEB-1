@@ -35,32 +35,44 @@
     </header>
     <div class="container">
       <main>
-        <table class="dataTable">
-          <thead>
-            <tr>
-              <th id="th-name">
-                <div>
-                  <span>Név</span>
-                  <span id="name"></span>
-                </div>
-              </th>
-              <th id="th-age">
-                <div>
-                  <span>Kor</span>
-                  <span id="age"></span>
-                </div>
-              </th>
-              <th id="th-city">
-                <div>
-                  <span>Város</span>
-                  <span id="city"></span>
-                </div>
-              </th>
-              <th>Művelet</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-container">
+            <div class="search-container">
+                <input type="text" placeholder="keresés..." id="searchInput">
+                <select id="searchInSelect">
+                    <option value="all">Mindenhol</option>
+                    <option value="name">Név</option>
+                    <option value="age">Kor</option>
+                    <option value="city">Város</option>
+                </select>
+                <button class="button" id="search-button">Keresés</button>
+            </div>
+            <table class="dataTable">
+              <thead>
+                <tr>
+                  <th id="th-name">
+                    <div>
+                      <span>Név</span>
+                      <span id="name"></span>
+                    </div>
+                  </th>
+                  <th id="th-age">
+                    <div>
+                      <span>Kor</span>
+                      <span id="age"></span>
+                    </div>
+                  </th>
+                  <th id="th-city">
+                    <div>
+                      <span>Város</span>
+                      <span id="city"></span>
+                    </div>
+                  </th>
+                  <th>Művelet</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+        </div>
       </main>
       <aside>
         <form class="table-form">
