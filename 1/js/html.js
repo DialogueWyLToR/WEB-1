@@ -5,7 +5,18 @@ const geolocationHTML = document.querySelector("#geolocation");
 const dragDropHTML = document.querySelector("#dragDrop");
 const canvasHTML = document.querySelector("#canvas");
 const svgHTML = document.querySelector("#svg");
-const eventList = document.getElementById("event-list");
+const eventList = document.querySelector(".event-list");
+const eventSource = new EventSource("http://localhost:3000/events");
+
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  eventList.innerHTML = `Üzenet: ${data.message} | Számláló: ${data.count}`;
+};
+
+eventSource.onerror = (error) => {
+  console.error("SSE hiba:", error);
+  eventSource.close();
+};
 webStorageHTML.querySelector("#store").addEventListener("click", () => {
   const data = prompt("Mit szeretnél eltárolni?", "szia localStorage");
   localStorage.setItem("test", JSON.stringify(data));
