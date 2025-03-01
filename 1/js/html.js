@@ -6,11 +6,12 @@ const dragDropHTML = document.querySelector("#dragDrop");
 const canvasHTML = document.querySelector("#canvas");
 const svgHTML = document.querySelector("#svg");
 const eventList = document.querySelector(".event-list");
-const eventSource = new EventSource("http://localhost:3000/events");
-
+const eventSource = new EventSource("https://sse.dev/test");
+let count = 0;
 eventSource.onmessage = (event) => {
   const data = JSON.parse(event.data);
-  eventList.innerHTML = `Üzenet: ${data.message} | Számláló: ${data.count}`;
+  count++;
+  eventList.innerHTML = `Üzenet: ${data.msg} | Számláló: ${count}`;
 };
 
 eventSource.onerror = (error) => {
