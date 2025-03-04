@@ -37,10 +37,20 @@
     </header>
     <div class="container">
       <main>
-        <canvas id="chartCanvas"></canvas>
+        <canvas id="chartCanvas" width="400" height="200"></canvas>
       </main>
       <aside>
+        <h2>Üzemanyagárak Magyarországon</h2>
         <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Dátum</th>
+              <th>95-ös benzin (Ft/l)</th>
+              <th>Dízel (Ft/l)</th>
+              <th>LPG (Ft/l)</th>
+              <th>Prémium benzin (Ft/l)</th>
+            </tr>
+          </thead>
           <tbody></tbody>
         </table>
       </aside>
@@ -53,23 +63,62 @@
         .getElementById("dataTable")
         .getElementsByTagName("tbody")[0];
       const canvas = document.getElementById("chartCanvas");
-      let chart = new Chart();
+      let chart = null;
 
-      function generateTable(rows = 5, cols = 5) {
-        for (let i = 0; i < rows; i++) {
+      const fuelPrices = [
+        {
+          date: "2024-02-20",
+          petrol95: 610,
+          diesel: 650,
+          lpg: 350,
+          premium: 680,
+        },
+        {
+          date: "2024-02-21",
+          petrol95: 615,
+          diesel: 645,
+          lpg: 355,
+          premium: 685,
+        },
+        {
+          date: "2024-02-22",
+          petrol95: 620,
+          diesel: 640,
+          lpg: 360,
+          premium: 690,
+        },
+        {
+          date: "2024-02-23",
+          petrol95: 625,
+          diesel: 655,
+          lpg: 365,
+          premium: 695,
+        },
+        {
+          date: "2024-02-24",
+          petrol95: 630,
+          diesel: 660,
+          lpg: 370,
+          premium: 700,
+        },
+      ];
+
+      function generateTable() {
+        fuelPrices.forEach((entry) => {
           const tr = document.createElement("tr");
-          for (let j = 0; j < cols; j++) {
+
+          Object.values(entry).forEach((value) => {
             const td = document.createElement("td");
-            td.textContent = Math.floor(Math.random() * 100); // Véletlenszámok
+            td.textContent = value;
             tr.appendChild(td);
-          }
-          tr.addEventListener("click", function () {
-            drawChart(
-              Array.from(tr.children).map((td) => Number(td.textContent))
-            );
           });
+
+          tr.addEventListener("click", function () {
+            drawChart(Object.values(entry).slice(1)); // Az első elem (dátum) kihagyása
+          });
+
           table.appendChild(tr);
-        }
+        });
       }
 
       function drawChart(data) {
@@ -77,15 +126,14 @@
           chart.destroy();
         }
         chart = new Chart(canvas, {
-          type: "line",
+          type: "bar",
           data: {
-            labels: data.map((_, i) => `Oszlop ${i + 1}`),
+            labels: ["95-ös benzin", "Dízel", "LPG", "Prémium benzin"],
             datasets: [
               {
-                label: "Kiválasztott sor",
+                label: "Üzemanyagárak (Ft/l)",
                 data: data,
-                borderColor: "blue",
-                fill: false,
+                backgroundColor: ["blue", "gray", "purple", "red"],
               },
             ],
           },
@@ -93,7 +141,7 @@
             responsive: true,
             scales: {
               y: {
-                beginAtZero: true,
+                beginAtZero: false,
               },
             },
           },

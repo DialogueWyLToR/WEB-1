@@ -108,12 +108,6 @@
   --header-main-footer-bg: #ffffff;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  align-items: stretch;
-}
-
 .button {
   background-color: var(--bg-primary);
   color: var(--text-light);
@@ -122,14 +116,21 @@
   border: none;
   cursor: pointer;
 }
-.active{
+.active {
   text-decoration: underline;
 }
 .button:hover {
   background-color: var(--button-hover);
 }
-@media (max-width: 640px) {
-  aside {
-    display: none;
+@media (max-width: 1024px) {
+  .container {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 450px;
   }
 }
