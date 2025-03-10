@@ -6,7 +6,7 @@ async function ReadCRUD(code) {
     },
     body: new URLSearchParams({
       op: "read",
-      code
+      code,
     }),
   });
   const data = await response.json();
@@ -18,17 +18,21 @@ async function ReadCRUD(code) {
  * weight: '78',
  */
 async function CreateCRUD(createData) {
+  const formData = new FormData();
+  formData.append("op", "create");
+  for (const [key, value] of Object.entries(createData)) {
+    formData.append(key, value);
+  }
   const response = await fetch("http://gamf.nhely.hu/ajax2/", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      op: "create",
-      ...createData,
-    }),
+    body: formData,
+    // formData({
+    //   op: "create",
+    //   ...createData,
+    // }),
   });
   const data = await response.json();
+  console.log(data);
   return data;
 }
 /**

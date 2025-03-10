@@ -87,13 +87,12 @@ export class Table {
     });
   };
   getNextUniqueId(data) {
-    // Az id-kat tisztítjuk és átalakítjuk számokká, majd eltávolítjuk a NaN értékeket
     const numbers = data.map((item) => {
       const num = Number(item.id.replace("NLYG87", "").trim());
-      return isNaN(num) ? -Infinity : num; // Ha NaN, akkor -Infinity-t adunk vissza
+      return isNaN(num) ? -Infinity : num; 
     });
 
-    return Math.max(...numbers) + 1; // A max számhoz hozzáadjuk a +1-et
+    return Math.max(...numbers) + 1; 
   }
   createUpdate = (e) => {
     e.preventDefault();

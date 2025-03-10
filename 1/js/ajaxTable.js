@@ -1,4 +1,4 @@
-import { ReadCRUD } from "./ajax.js";
+import { CreateCRUD, ReadCRUD } from "./ajax.js";
 import { Table } from "./table.js";
 import { code } from "./constans.js";
 const data = await ReadCRUD(code);
