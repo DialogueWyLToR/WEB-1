@@ -7,7 +7,7 @@
     <script type="module" src="../js/main.js" defer></script>
     <script type="module" src="../js/constans.js" defer></script>
     <script type="module" src="../js/ajax.js" defer></script>
-    <script type="module" src="../js/table.js" defer></script>
+    <script type="module" src="../js/staticTable.js" defer></script>
     <link rel="stylesheet" href="../css/skeleton.css" />
   </head>
   <body>
@@ -41,8 +41,9 @@
                 <select id="searchInSelect">
                     <option value="all">Mindenhol</option>
                     <option value="name">Név</option>
-                    <option value="age">Kor</option>
-                    <option value="city">Város</option>
+                    <option value="width">Szélesség</option>
+                    <option value="height">Magasság</option>
+                    <option value="code">Kód</option>
                 </select>
                 <button class="button" id="search-button">Keresés</button>
             </div>
@@ -55,16 +56,22 @@
                       <span id="name"></span>
                     </div>
                   </th>
-                  <th id="th-age">
+                  <th id="th-width">
                     <div>
-                      <span>Kor</span>
-                      <span id="age"></span>
+                      <span>Szélesség</span>
+                      <span id="width"></span>
                     </div>
                   </th>
-                  <th id="th-city">
+                  <th id="th-height">
                     <div>
-                      <span>Város</span>
-                      <span id="city"></span>
+                      <span>Magasság</span>
+                      <span id="height"></span>
+                    </div>
+                  </th>
+                  <th id="th-code">
+                    <div>
+                      <span>Kód</span>
+                      <span id="code"></span>
                     </div>
                   </th>
                   <th>Művelet</th>
@@ -75,13 +82,15 @@
         </div>
       </main>
       <aside>
-        <form class="table-form">
+        <form class="table-form static">
           <label for="form-name">Név</label>
           <input type="text" id="form-name" />
-          <label for="form-age">Kor</label>
-          <input type="number" id="form-age" />
-          <label for="form-city">Város</label>
-          <input type="text" id="form-city" />
+          <label for="form-width">Szélesség</label>
+          <input type="number" id="form-width" />
+          <label for="form-height">Magasság</label>
+          <input type="number" id="form-height" />
+          <label for="form-code">Kód</label>
+          <input type="text" id="form-code" />
           <button class="button" id="createBtn">Létrehozás</button>
         </form>
       </aside>

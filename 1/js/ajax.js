@@ -1,6 +1,4 @@
-import { code } from "./constans.js";
-
-async function ReadCRUD() {
+async function ReadCRUD(code) {
   const response = await fetch("http://gamf.nhely.hu/ajax2/", {
     method: "POST",
     headers: {
@@ -8,7 +6,7 @@ async function ReadCRUD() {
     },
     body: new URLSearchParams({
       op: "read",
-      code,
+      code
     }),
   });
   const data = await response.json();
@@ -19,7 +17,7 @@ async function ReadCRUD() {
  * height: '185',
  * weight: '78',
  */
-async function CreateCRUD({ createData }) {
+async function CreateCRUD(createData) {
   const response = await fetch("http://gamf.nhely.hu/ajax2/", {
     method: "POST",
     headers: {
@@ -27,7 +25,6 @@ async function CreateCRUD({ createData }) {
     },
     body: new URLSearchParams({
       op: "create",
-      code,
       ...createData,
     }),
   });
@@ -49,7 +46,6 @@ async function UpdateCRUD({ updateData }) {
     },
     body: new URLSearchParams({
       op: "update",
-      code,
       ...updateData,
     }),
   });
@@ -65,7 +61,6 @@ async function DeleteCRUD({ id }) {
     body: new URLSearchParams({
       op: "delete",
       id,
-      code,
     }),
   });
   const data = await response.json();

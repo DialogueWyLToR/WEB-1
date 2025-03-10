@@ -1,168 +1,218 @@
-const tableBody = document.querySelector(".dataTable tbody");
-const formHTML = document.querySelector(".table-form");
-const createBtn = document.querySelector("#createBtn");
-const stats = document.querySelector("#stats");
-const data = JSON.parse(localStorage.getItem("data") || "[]");
-const searchBtn = document.querySelector("#search-button");
-
-const arrang = {
-  byName: document.querySelector("#th-name"),
-  byAge: document.querySelector("#th-age"),
-  byCity: document.querySelector("#th-city"),
-};
-
-let editIndex = null;
-
-const getUrlParams = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  return {
-    sortBy: urlParams.get("sortBy") || "name",
-    order: urlParams.get("order") || "asc",
-    search: urlParams.get("search") || "",
-    searchIn: urlParams.get("searchIn") || "all",
+import { CreateCRUD } from "./ajax.js";
+import { code } from "./constans.js";
+const CODE = code;
+export class Table {
+  formCode = {
+    label: document.querySelector("#label-form-code"),
+    input: document.querySelector("#form-code"),
   };
-};
-
-const searchData = (searchQuery, searchField) => {
-  return data.filter((item) => {
-    if (!searchQuery) return true; // Ha nincs keresés, ne szűrjünk
-    if (searchField === "all") {
-      return Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    } else {
-      return String(item[searchField])
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-    }
-  });
-};
-
-const sortData = () => {
-  const { sortBy, order, search, searchIn } = getUrlParams();
-  const filteredData = searchData(search, searchIn).sort((a, b) => {
-    let valueA = a[sortBy];
-    let valueB = b[sortBy];
-
-    if (typeof valueA === "number" && typeof valueB === "number") {
-      return order === "asc" ? valueA - valueB : valueB - valueA;
-    }
-    if (typeof valueA === "string" && typeof valueB === "string") {
-      return order === "asc"
-        ? valueA.localeCompare(valueB)
-        : valueB.localeCompare(valueA);
-    }
-    return 0;
-  });
-
-  renderTable(filteredData);
-};
-
-const renderTable = (renderData = data) => {
-  tableBody.innerHTML = "";
-  if (renderData.length === 0) {
-    tableBody.innerHTML = "<tr><td colspan='4'>Nincs találat</td></tr>";
-    return;
+  tableBody = document.querySelector(".dataTable tbody");
+  createBtn = document.querySelector("#createBtn");
+  searchBtn = document.querySelector("#search-button");
+  arrang = {
+    byName: document.querySelector("#th-name"),
+    bywidth: document.querySelector("#th-width"),
+    byheight: document.querySelector("#th-height"),
+    bycode: document.querySelector("#th-code"),
+  };
+  editIndex = null;
+  constructor(data, form, staticSite = true) {
+    this.data = staticSite ? data : data.list;
+    this.form = form;
+    this.staticSite = staticSite;
   }
-
-  renderData.forEach((row, index) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${row.name}</td>
-      <td>${row.age}</td>
-      <td>${row.city}</td>
-      <td>
-        <button class="button" onclick="editRow(${index})">Szerkesztés</button>
-        <button class="button" onclick="deleteRow(${index})">Törlés</button>
-      </td>
-    `;
-    tableBody.appendChild(tr);
-  });
-};
-
-Object.values(arrang).forEach((element) => {
-  element.addEventListener("click", () => {
-    const { order } = getUrlParams();
-    let newOrder = order === "asc" ? "desc" : "asc";
-    let newSortBy = element.id.split("-")[1];
-
-    const newUrl = new URL(window.location.href);
-    newUrl.searchParams.set("order", newOrder);
-    newUrl.searchParams.set("sortBy", newSortBy);
-    history.pushState({}, "", newUrl);
-
-    Object.values(arrang).forEach((el) => {
-      const iconTarget = el.querySelector("span[id]");
-      if (iconTarget) {
-        iconTarget.textContent = ""; 
+  getUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+      sortBy: urlParams.get("sortBy") || "name",
+      order: urlParams.get("order") || "asc",
+      search: urlParams.get("search") || "",
+      searchIn: urlParams.get("searchIn") || "all",
+    };
+  }
+  searchData = (searchQuery, searchField) => {
+    if (!this.data) return;
+    return this.data.filter((item) => {
+      if (!searchQuery) return true;
+      if (searchField === "all") {
+        return Object.values(item).some((value) =>
+          String(value).toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      } else {
+        return String(item[searchField])
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
       }
     });
+  };
+  sortData = () => {
+    const { sortBy, order, search, searchIn } = this.getUrlParams();
+    const filteredData = this.searchData(search, searchIn).sort((a, b) => {
+      let valueA = a[sortBy];
+      let valueB = b[sortBy];
 
-    const iconTarget = element.querySelector("span[id]");
-    if (iconTarget) {
-      iconTarget.textContent = newOrder === "asc" ? " ↓" : " ↑";
+      if (typeof valueA === "number" && typeof valueB === "number") {
+        return order === "asc" ? valueA - valueB : valueB - valueA;
+      }
+      if (typeof valueA === "string" && typeof valueB === "string") {
+        return order === "asc"
+          ? valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
+      }
+      return 0;
+    });
+
+    this.renderTable(filteredData);
+  };
+  renderTable = (renderData = this.data) => {
+    this.tableBody.innerHTML = "";
+    if (renderData.length === 0) {
+      this.tableBody.innerHTML = "<tr><td colspan='4'>Nincs találat</td></tr>";
+      return;
     }
-    sortData();
-  });
-});
 
-const createUpdate = (e) => {
-  e.preventDefault();
+    renderData.forEach((row, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.name}</td>
+        <td>${row.width}</td>
+        <td>${row.height}</td>
+        ${this.isAsync() ? "" : `<td>${row.code}</td>`}
+        <td>
+          <button class="button" onclick="editRow(${index})">Szerkesztés</button>
+          <button class="button" onclick="deleteRow(${index})">Törlés</button>
+        </td>
+      `;
+      this.tableBody.appendChild(tr);
+    });
+  };
+  getNextUniqueId(data) {
+    // Az id-kat tisztítjuk és átalakítjuk számokká, majd eltávolítjuk a NaN értékeket
+    const numbers = data.map((item) => {
+      const num = Number(item.id.replace("NLYG87", "").trim());
+      return isNaN(num) ? -Infinity : num; // Ha NaN, akkor -Infinity-t adunk vissza
+    });
 
-  const name = document.querySelector("#form-name").value.trim();
-  const age = Number(document.querySelector("#form-age").value.trim());
-  const city = document.querySelector("#form-city").value.trim();
-
-  if (!name || isNaN(age) || age <= 0 || !city) {
-    alert("Érvényes adatokat adj meg!");
-    return;
+    return Math.max(...numbers) + 1; // A max számhoz hozzáadjuk a +1-et
   }
+  createUpdate = (e) => {
+    e.preventDefault();
 
-  if (editIndex !== null) {
-    data[editIndex] = { name, age, city };
-    createBtn.innerHTML = "Hozzáadás";
-    editIndex = null;
-  } else {
-    data.push({ name, age, city });
+    const name = document.querySelector("#form-name").value.trim();
+    const width = Number(document.querySelector("#form-width").value.trim());
+    const height = Number(document.querySelector("#form-height").value.trim());
+    const code = this.isAsync()
+      ? CODE
+      : document.querySelector("#form-code").value.trim();
+    const isOkWidth = isNaN(width) || width <= 0;
+    const isOkHeight = isNaN(height) || height <= 0;
+    if (!name || isOkWidth || isOkHeight || !code) {
+      alert("Érvényes adatokat adj meg!");
+      return;
+    }
+
+    if (this.editIndex !== null) {
+      this.data[this.editIndex] = { name, width, height, code };
+      this.createBtn.innerHTML = "Hozzáadás";
+      this.editIndex = null;
+    } else {
+      if (this.isAsync()) {
+        const idx =
+          this.data.reduce(
+            (prev, curr) =>
+              Number(prev.id) > Number(curr.id) ? prev.id : curr.id,
+            0
+          ) + 1;
+        const sendedData = {
+          id: idx.toString(),
+          name,
+          width: width.toString(),
+          height: height.toString(),
+          code: CODE,
+        };
+        console.log(sendedData);
+        CreateCRUD({ ...sendedData });
+      } else {
+        this.data.push({ name, width, height, code });
+      }
+    }
+    if (!this.isAsync()) {
+      this.saveToLocal();
+    }
+    this.sortData();
+    this.form.reset();
+  };
+  isAsync() {
+    return this.staticSite == false;
   }
-
-  saveToLocal();
-  sortData();
-  formHTML.reset();
-};
-
-window.editRow = (idx) => {
-  createBtn.innerHTML = "Módosítás";
-  editIndex = idx;
-
-  document.querySelector("#form-name").value = data[idx].name;
-  document.querySelector("#form-age").value = data[idx].age;
-  document.querySelector("#form-city").value = data[idx].city;
-};
-
-window.deleteRow = (idx) => {
-  if (confirm("Biztosan törölni szeretnéd ezt a sort?")) {
-    data.splice(idx, 1);
-    saveToLocal();
-    sortData();
+  initAsync() {
+    if (this.isAsync()) {
+      this.arrang.bycode.style.display = "none";
+      Object.values(this.formCode).forEach((el) => (el.style.display = "none"));
+    }
   }
-};
+  saveToLocal = () => {
+    localStorage.setItem("data", JSON.stringify(this.data));
+  };
+  init() {
+    this.initAsync();
+    Object.values(this.arrang).forEach((element) => {
+      element.addEventListener("click", () => {
+        const { order } = this.getUrlParams();
+        let newOrder = order === "asc" ? "desc" : "asc";
+        let newSortBy = element.id.split("-")[1];
 
-searchBtn.addEventListener("click", () => {
-  const searchInput = document.getElementById("searchInput").value.trim();
-  const searchField = document.getElementById("searchInSelect").value.trim();
-  const newUrl = new URL(window.location.href);
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set("order", newOrder);
+        newUrl.searchParams.set("sortBy", newSortBy);
+        history.pushState({}, "", newUrl);
 
-  newUrl.searchParams.set("search", searchInput);
-  newUrl.searchParams.set("searchIn", searchField);
-  history.pushState({}, "", newUrl);
+        Object.values(this.arrang).forEach((el) => {
+          const iconTarget = el.querySelector("span[id]");
+          if (iconTarget) {
+            iconTarget.textContent = "";
+          }
+        });
 
-  sortData();
-});
+        const iconTarget = element.querySelector("span[id]");
+        if (iconTarget) {
+          iconTarget.textContent = newOrder === "asc" ? " ↓" : " ↑";
+        }
+        this.sortData();
+      });
+    });
+    this.searchBtn.addEventListener("click", () => {
+      const searchInput = document.getElementById("searchInput").value.trim();
+      const searchField = document
+        .getElementById("searchInSelect")
+        .value.trim();
+      const newUrl = new URL(window.location.href);
 
-const saveToLocal = () => {
-  localStorage.setItem("data", JSON.stringify(data));
-};
+      newUrl.searchParams.set("search", searchInput);
+      newUrl.searchParams.set("searchIn", searchField);
+      history.pushState({}, "", newUrl);
 
-formHTML.addEventListener("submit", createUpdate);
-sortData();
+      this.sortData();
+    });
+    window.editRow = (idx) => {
+      this.createBtn.innerHTML = "Módosítás";
+      this.editIndex = idx;
+
+      document.querySelector("#form-name").value = this.data[idx].name;
+      document.querySelector("#form-width").value = this.data[idx].width;
+      document.querySelector("#form-height").value = this.data[idx].height;
+      document.querySelector("#form-code").value = this.data[idx].code;
+    };
+    window.deleteRow = (idx) => {
+      if (confirm("Biztosan törölni szeretnéd ezt a sort?")) {
+        this.data.splice(idx, 1);
+        if (!this.isAsync()) {
+          this.saveToLocal();
+        }
+        this.sortData();
+      }
+    };
+    this.form.addEventListener("submit", this.createUpdate);
+    this.sortData();
+  }
+}
