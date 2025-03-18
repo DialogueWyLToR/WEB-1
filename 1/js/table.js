@@ -89,10 +89,10 @@ export class Table {
   getNextUniqueId(data) {
     const numbers = data.map((item) => {
       const num = Number(item.id.replace("NLYG87", "").trim());
-      return isNaN(num) ? -Infinity : num; 
+      return isNaN(num) ? -Infinity : num;
     });
 
-    return Math.max(...numbers) + 1; 
+    return Math.max(...numbers) + 1;
   }
   createUpdate = (e) => {
     e.preventDefault();
@@ -116,14 +116,7 @@ export class Table {
       this.editIndex = null;
     } else {
       if (this.isAsync()) {
-        const idx =
-          this.data.reduce(
-            (prev, curr) =>
-              Number(prev.id) > Number(curr.id) ? prev.id : curr.id,
-            0
-          ) + 1;
         const sendedData = {
-          id: idx.toString(),
           name,
           width: width.toString(),
           height: height.toString(),

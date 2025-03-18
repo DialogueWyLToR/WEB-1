@@ -18,21 +18,19 @@ async function ReadCRUD(code) {
  * weight: '78',
  */
 async function CreateCRUD(createData) {
-  const formData = new FormData();
-  formData.append("op", "create");
+  let bodyData = "op=create";
   for (const [key, value] of Object.entries(createData)) {
-    formData.append(key, value);
+    bodyData+=`&${key}=${value}`
   }
   const response = await fetch("http://gamf.nhely.hu/ajax2/", {
     method: "POST",
-    body: formData,
-    // formData({
-    //   op: "create",
-    //   ...createData,
-    // }),
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: bodyData
   });
-  const data = await response.json();
-  console.log(data);
+  const data = await response.text();
   return data;
 }
 /**
