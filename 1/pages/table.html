@@ -13,7 +13,9 @@
   <body>
     <header>
       <nav>
-        <h1><a href="../index.html">Web-programozás-1 Előadás Házi feladat</a></h1>
+        <h1>
+          <a href="../index.html">Web-programozás-1 Előadás Házi feladat</a>
+        </h1>
         <ul>
           <li class="button active" id="li-menu-table">
             <a href="./table.html">Táblázat</a>
@@ -36,57 +38,58 @@
     <div class="container">
       <main>
         <div class="table-container">
-            <div class="search-container">
-                <input type="text" placeholder="keresés..." id="searchInput">
-                <select id="searchInSelect">
-                    <option value="all">Mindenhol</option>
-                    <option value="name">Név</option>
-                    <option value="width">Szélesség</option>
-                    <option value="height">Magasság</option>
-                    <option value="code">Kód</option>
-                </select>
-                <button class="button" id="search-button">Keresés</button>
-            </div>
-            <table class="dataTable">
-              <thead>
-                <tr>
-                  <th id="th-name">
-                    <div>
-                      <span>Név</span>
-                      <span id="name"></span>
-                    </div>
-                  </th>
-                  <th id="th-width">
-                    <div>
-                      <span>Szélesség</span>
-                      <span id="width"></span>
-                    </div>
-                  </th>
-                  <th id="th-height">
-                    <div>
-                      <span>Magasság</span>
-                      <span id="height"></span>
-                    </div>
-                  </th>
-                  <th id="th-code">
-                    <div>
-                      <span>Kód</span>
-                      <span id="code"></span>
-                    </div>
-                  </th>
-                  <th>Művelet</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+          <div class="search-container">
+            <input type="text" placeholder="keresés..." id="searchInput" />
+            <select id="searchInSelect">
+              <option value="all">Mindenhol</option>
+              <option value="name">Név</option>
+              <option value="weight">Súly</option>
+              <option value="height">Magasság</option>
+              <option value="code">Kód</option>
+            </select>
+            <button class="button" id="search-button">Keresés</button>
+          </div>
+          <table class="dataTable">
+            <thead>
+              <tr>
+                <th id="th-name">
+                  <div>
+                    <span>Név</span>
+                    <span id="name"></span>
+                  </div>
+                </th>
+                <th id="th-weight">
+                  <div>
+                    <span>Súly</span>
+                    <span id="weight"></span>
+                  </div>
+                </th>
+                <th id="th-height">
+                  <div>
+                    <span>Magasság</span>
+                    <span id="height"></span>
+                  </div>
+                </th>
+                <th id="th-code">
+                  <div>
+                    <span>Kód</span>
+                    <span id="code"></span>
+                  </div>
+                </th>
+                <th>Művelet</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
       </main>
       <aside>
         <form class="table-form static">
+          <input type="hidden" id="form-id" />
           <label for="form-name">Név</label>
           <input type="text" id="form-name" />
-          <label for="form-width">Szélesség</label>
-          <input type="number" id="form-width" />
+          <label for="form-weight">Súly</label>
+          <input type="number" id="form-weight" />
           <label for="form-height">Magasság</label>
           <input type="number" id="form-height" />
           <label for="form-code">Kód</label>

@@ -1,4 +1,4 @@
-import { CreateCRUD } from "./ajax.js";
+import { CreateCRUD, DeleteCRUD, ReadCRUD, UpdateCRUD } from "./ajax.js";
 import { code } from "./constans.js";
 const CODE = code;
 export class Table {
@@ -11,15 +11,20 @@ export class Table {
   searchBtn = document.querySelector("#search-button");
   arrang = {
     byName: document.querySelector("#th-name"),
-    bywidth: document.querySelector("#th-width"),
+    byweight: document.querySelector("#th-weight"),
     byheight: document.querySelector("#th-height"),
     bycode: document.querySelector("#th-code"),
   };
   editIndex = null;
   constructor(data, form, staticSite = true) {
-    this.data = staticSite ? data : data.list;
+    this.data = staticSite ? data : [];
     this.form = form;
     this.staticSite = staticSite;
+  }
+  async getDatas() {
+    const responsed = await ReadCRUD(code);
+    this.data = responsed.list;
+    this.renderTable(this.data);
   }
   getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -75,12 +80,16 @@ export class Table {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${row.name}</td>
-        <td>${row.width}</td>
+        <td>${row.weight}</td>
         <td>${row.height}</td>
         ${this.isAsync() ? "" : `<td>${row.code}</td>`}
         <td>
-          <button class="button" onclick="editRow(${index})">Szerkesztés</button>
-          <button class="button" onclick="deleteRow(${index})">Törlés</button>
+          <button class="button" onclick="editRow(${
+            this.staticSite ? index : row.id
+          })">Szerkesztés</button>
+          <button class="button" onclick="deleteRow(${
+            this.staticSite ? index : row.id
+          })">Törlés</button>
         </td>
       `;
       this.tableBody.appendChild(tr);
@@ -94,60 +103,74 @@ export class Table {
 
     return Math.max(...numbers) + 1;
   }
-  createUpdate = (e) => {
+  createUpdate = async (e) => {
     e.preventDefault();
 
     const name = document.querySelector("#form-name").value.trim();
-    const width = Number(document.querySelector("#form-width").value.trim());
+    const weight = Number(document.querySelector("#form-weight").value.trim());
     const height = Number(document.querySelector("#form-height").value.trim());
     const code = this.isAsync()
       ? CODE
       : document.querySelector("#form-code").value.trim();
-    const isOkWidth = isNaN(width) || width <= 0;
+    const isOkweight = isNaN(weight) || weight <= 0;
     const isOkHeight = isNaN(height) || height <= 0;
-    if (!name || isOkWidth || isOkHeight || !code) {
+    if (!name || isOkweight || isOkHeight || !code) {
       alert("Érvényes adatokat adj meg!");
       return;
     }
 
     if (this.editIndex !== null) {
-      this.data[this.editIndex] = { name, width, height, code };
-      this.createBtn.innerHTML = "Hozzáadás";
-      this.editIndex = null;
+      if (!this.isAsync()) {
+        this.data[this.editIndex] = { name, weight, height, code };
+        this.saveToLocal();
+        this.renderTable();
+        this.sortData();
+      } else {
+        const updatedData = {
+          id: document.querySelector("#form-id").value,
+          name,
+          weight: weight.toString(),
+          height: height.toString(),
+          code: CODE,
+        };
+        await UpdateCRUD(updatedData);
+        await this.getDatas();
+      }
     } else {
       if (this.isAsync()) {
         const sendedData = {
           name,
-          width: width.toString(),
+          weight: weight.toString(),
           height: height.toString(),
           code: CODE,
         };
-        console.log(sendedData);
-        CreateCRUD({ ...sendedData });
+        await CreateCRUD(sendedData);
+        await this.getDatas();
       } else {
-        this.data.push({ name, width, height, code });
+        this.data[this.editIndex] = { name, weight, height, code };
+        this.data.push({ name, weight, height, code });
+        this.saveToLocal();
+        this.renderTable();
+        this.sortData();
       }
     }
-    if (!this.isAsync()) {
-      this.saveToLocal();
-    }
-    this.sortData();
+    this.createBtn.innerHTML = "Hozzáadás";
+    this.editIndex = null;
     this.form.reset();
   };
   isAsync() {
     return this.staticSite == false;
   }
-  initAsync() {
-    if (this.isAsync()) {
-      this.arrang.bycode.style.display = "none";
-      Object.values(this.formCode).forEach((el) => (el.style.display = "none"));
-    }
+  async initAsync() {
+    this.arrang.bycode.style.display = "none";
+    Object.values(this.formCode).forEach((el) => (el.style.display = "none"));
+    document.querySelector(".search-container").style.display = "none";
+    await this.getDatas();
   }
   saveToLocal = () => {
     localStorage.setItem("data", JSON.stringify(this.data));
   };
-  init() {
-    this.initAsync();
+  initStatic() {
     Object.values(this.arrang).forEach((element) => {
       element.addEventListener("click", () => {
         const { order } = this.getUrlParams();
@@ -186,22 +209,45 @@ export class Table {
 
       this.sortData();
     });
+  }
+  async init() {
+    if (this.isAsync()) {
+      await this.initAsync();
+    } else {
+      this.initStatic();
+    }
+
     window.editRow = (idx) => {
       this.createBtn.innerHTML = "Módosítás";
       this.editIndex = idx;
-
-      document.querySelector("#form-name").value = this.data[idx].name;
-      document.querySelector("#form-width").value = this.data[idx].width;
-      document.querySelector("#form-height").value = this.data[idx].height;
-      document.querySelector("#form-code").value = this.data[idx].code;
+      if (this.isAsync()) {
+        this.editIndex = this.data.findIndex((dat) => dat.id == idx);
+      }
+      document.querySelector("#form-id").value = idx;
+      document.querySelector("#form-name").value =
+        this.data[this.staticSite ? idx : this.editIndex].name;
+      document.querySelector("#form-weight").value =
+        this.data[this.staticSite ? idx : this.editIndex].weight;
+      document.querySelector("#form-height").value =
+        this.data[this.staticSite ? idx : this.editIndex].height;
+      document.querySelector("#form-code").value =
+        this.data[this.staticSite ? idx : this.editIndex].code;
     };
-    window.deleteRow = (idx) => {
+    window.deleteRow = async (idx) => {
       if (confirm("Biztosan törölni szeretnéd ezt a sort?")) {
-        this.data.splice(idx, 1);
         if (!this.isAsync()) {
+          this.data.splice(idx, 1);
           this.saveToLocal();
+          this.sortData();
+        } else {
+          const deleteData = {
+            id: idx,
+            code,
+          };
+          await DeleteCRUD(deleteData);
+          await this.getDatas();
+          this.form.reset();
         }
-        this.sortData();
       }
     };
     this.form.addEventListener("submit", this.createUpdate);

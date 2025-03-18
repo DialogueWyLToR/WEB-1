@@ -43,7 +43,7 @@
             <select id="searchInSelect">
               <option value="all">Mindenhol</option>
               <option value="name">Név</option>
-              <option value="width">Szélesség</option>
+              <option value="weight">Súly</option>
               <option value="height">Magasság</option>
               <option value="code">Kód</option>
             </select>
@@ -58,10 +58,10 @@
                     <span id="name"></span>
                   </div>
                 </th>
-                <th id="th-width">
+                <th id="th-weight">
                   <div>
-                    <span>Szélesség</span>
-                    <span id="width"></span>
+                    <span>Súly</span>
+                    <span id="weight"></span>
                   </div>
                 </th>
                 <th id="th-height">
@@ -85,12 +85,13 @@
       </main>
       <aside>
         <form class="table-form ajax">
+          <input type="hidden" id="form-id" />
           <label id="label-form-name" for="form-name">Név</label>
-          <input type="text" id="form-name" value="teszt" />
-          <label id="label-form-width" for="form-width">Szélesség</label>
-          <input type="number" id="form-width" value="50" />
+          <input type="text" id="form-name" />
+          <label id="label-form-weight" for="form-weight">Súly</label>
+          <input type="number" id="form-weight" />
           <label id="label-form-height" for="form-height">Magasság</label>
-          <input type="number" id="form-height" value="50" />
+          <input type="number" id="form-height" />
           <label id="label-form-code" for="form-code">Kód</label>
           <input type="text" id="form-code" />
           <button class="button" id="createBtn">Létrehozás</button>

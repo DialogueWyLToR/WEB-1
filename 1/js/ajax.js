@@ -1,5 +1,7 @@
+import { fetchURL } from "./constans.js";
+
 async function ReadCRUD(code) {
-  const response = await fetch("http://gamf.nhely.hu/ajax2/", {
+  const response = await fetch(fetchURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -18,19 +20,19 @@ async function ReadCRUD(code) {
  * weight: '78',
  */
 async function CreateCRUD(createData) {
-  let bodyData = "op=create";
-  for (const [key, value] of Object.entries(createData)) {
-    bodyData+=`&${key}=${value}`
-  }
-  const response = await fetch("http://gamf.nhely.hu/ajax2/", {
+  const response = await fetch(fetchURL, {
     method: "POST",
-    cache: "no-cache",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: bodyData
+    body: new URLSearchParams({
+      op: "create",
+      code,
+      ...createData,
+    }),
   });
   const data = await response.text();
+  alert(data == "1" ? "Sikeres létrehozás" : "Sikertelen létrehozás");
   return data;
 }
 /**
@@ -40,8 +42,8 @@ async function CreateCRUD(createData) {
  * height: "185",
  * weight: "78",
  */
-async function UpdateCRUD({ updateData }) {
-  const response = await fetch("http://gamf.nhely.hu/ajax2/", {
+async function UpdateCRUD(updateData) {
+  const response = await fetch(fetchURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -51,21 +53,24 @@ async function UpdateCRUD({ updateData }) {
       ...updateData,
     }),
   });
-  const data = await response.json();
+  const data = await response.text();
+  alert(data == "1" ? "Sikeres módosítás" : "Sikertelen módosítás");
   return data;
 }
-async function DeleteCRUD({ id }) {
-  const response = await fetch("http://gamf.nhely.hu/ajax2/", {
+async function DeleteCRUD(deleteData) {
+  const response = await fetch(fetchURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
       op: "delete",
-      id,
+      ...deleteData,
     }),
   });
-  const data = await response.json();
+  const data = await response.text();
+  alert(data == "1" ? "Sikeres törlés" : "Sikertelen törlés");
+
   return data;
 }
 
