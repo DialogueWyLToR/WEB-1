@@ -1,0 +1,232 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+header h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+header .menu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .menu-btn {
+    display: block;
+  }
+
+  ul.menu {
+    flex-direction: column;
+    display: none;
+    background: #444;
+    padding: 1rem;
+  }
+
+  ul.menu.open {
+    display: flex;
+  }
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+.home{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.hangman-game h1{
+  text-align: center;
+}
+.hangman-game .hangman{
+  display: flex;
+  justify-content: center;
+}
+.hangman-game .word {
+  letter-spacing: 1rem;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hangman-game .keyboard {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.hangman-game .keyboard button {
+  margin: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.hangman-game .hangman {
+  margin: 20px 0;
+  font-size: 1.5rem;
+}
+
+.hangman-game .result {
+  font-size: 1.8rem;
+  margin-top: 1rem;
+  color: green;
+}
+
+.hangman-game .lost {
+  color: red;
+}
+.millionaire-game .question-state{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.millionaire-game h1 {
+  color: #2c3e50;
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.millionaire-game h2 {
+  color: #16a085;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.millionaire-game .question {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.millionaire-game .options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.millionaire-game .options button {
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 200px;
+  transition: background-color 0.3s;
+}
+
+.millionaire-game .options button:hover {
+  background-color: #3498db;
+}
+
+.millionaire-game .result {
+  text-align: center;
+  font-size: 24px;
+  color: #e74c3c;
+}
+
+.millionaire-game .score {
+  font-size: 20px;
+  color: #2ecc71;
+}
+
+@media (max-width: 600px) {
+  .millionaire-game h1 {
+    font-size: 28px;
+  }
+
+  .millionaire-game h2 {
+    font-size: 20px;
+  }
+
+  .millionaire-game .question {
+    font-size: 18px;
+  }
+
+  .millionaire-game .options button {
+    font-size: 16px;
+    width: 150px;
+  }
+}
