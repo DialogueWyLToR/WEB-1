@@ -1,0 +1,73 @@
+.millionaire-game h1 {
+    color: #2c3e50;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.millionaire-game h2 {
+    color: #16a085;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.millionaire-game .question {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.millionaire-game .options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.millionaire-game .options button {
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 200px;
+    transition: background-color 0.3s;
+}
+
+.millionaire-game .options button:hover {
+    background-color: #3498db;
+}
+
+.millionaire-game .result {
+    text-align: center;
+    font-size: 24px;
+    color: #e74c3c;
+}
+
+.millionaire-game .score {
+    font-size: 20px;
+    color: #2ecc71;
+}
+
+/* Mobile support */
+@media (max-width: 600px) {
+    .millionaire-game h1 {
+        font-size: 28px;
+    }
+
+    .millionaire-game h2 {
+        font-size: 20px;
+    }
+
+    .millionaire-game .question {
+        font-size: 18px;
+    }
+
+    .millionaire-game .options button {
+        font-size: 16px;
+        width: 150px;
+    }
+}

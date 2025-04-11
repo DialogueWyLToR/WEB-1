@@ -1,0 +1,11 @@
+@import url("./header.css");
+@import url("./main.css");
+@import url("./footer.css");
+@import url("./components.css");
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
