@@ -76,20 +76,19 @@ export class Table {
       return;
     }
 
-    renderData.forEach((row, index) => {
+    renderData.forEach((row) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
+        <td>${row.id}</td>
         <td>${row.name}</td>
         <td>${row.weight}</td>
         <td>${row.height}</td>
         ${this.isAsync() ? "" : `<td>${row.code}</td>`}
         <td>
           <button class="button" onclick="editRow(${
-            this.staticSite ? index : row.id
+            row.id
           })">Szerkesztés</button>
-          <button class="button" onclick="deleteRow(${
-            this.staticSite ? index : row.id
-          })">Törlés</button>
+          <button class="button" onclick="deleteRow(${row.id})">Törlés</button>
         </td>
       `;
       this.tableBody.appendChild(tr);
@@ -105,7 +104,6 @@ export class Table {
   }
   createUpdate = async (e) => {
     e.preventDefault();
-
     const name = document.querySelector("#form-name").value.trim();
     const weight = Number(document.querySelector("#form-weight").value.trim());
     const height = Number(document.querySelector("#form-height").value.trim());
@@ -121,10 +119,16 @@ export class Table {
 
     if (this.editIndex !== null) {
       if (!this.isAsync()) {
-        this.data[this.editIndex] = { name, weight, height, code };
+        console.log(this.editIndex);
+        this.data[this.editIndex] = {
+          id: Number(document.querySelector("#form-id").value),
+          name,
+          weight,
+          height,
+          code,
+        };
         this.saveToLocal();
         this.renderTable();
-        this.sortData();
       } else {
         const updatedData = {
           id: document.querySelector("#form-id").value,
@@ -147,8 +151,14 @@ export class Table {
         await CreateCRUD(sendedData);
         await this.getDatas();
       } else {
+        const maxId =
+          this.data.length > 0
+            ? Math.max(...this.data.map((item) => item.id))
+            : 0;
+
+        const newId = maxId + 1;
         this.data[this.editIndex] = { name, weight, height, code };
-        this.data.push({ name, weight, height, code });
+        this.data.push({ id: newId, name, weight, height, code });
         this.saveToLocal();
         this.renderTable();
         this.sortData();
@@ -219,24 +229,22 @@ export class Table {
 
     window.editRow = (idx) => {
       this.createBtn.innerHTML = "Módosítás";
-      this.editIndex = idx;
-      if (this.isAsync()) {
-        this.editIndex = this.data.findIndex((dat) => dat.id == idx);
-      }
+      this.editIndex = this.data.findIndex((dat) => dat.id == idx);
       document.querySelector("#form-id").value = idx;
       document.querySelector("#form-name").value =
-        this.data[this.staticSite ? idx : this.editIndex].name;
+        this.data[this.editIndex].name;
       document.querySelector("#form-weight").value =
-        this.data[this.staticSite ? idx : this.editIndex].weight;
+        this.data[this.editIndex].weight;
       document.querySelector("#form-height").value =
-        this.data[this.staticSite ? idx : this.editIndex].height;
+        this.data[this.editIndex].height;
       document.querySelector("#form-code").value =
-        this.data[this.staticSite ? idx : this.editIndex].code;
+        this.data[this.editIndex].code;
     };
     window.deleteRow = async (idx) => {
       if (confirm("Biztosan törölni szeretnéd ezt a sort?")) {
         if (!this.isAsync()) {
-          this.data.splice(idx, 1);
+          const filtered = this.data.filter((dat) => dat.id !== idx);
+          this.data = filtered;
           this.saveToLocal();
           this.sortData();
         } else {
